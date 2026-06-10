@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title></title>
+		<meta charset="UTF-8">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TweenMax.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.4/jquery.backstretch.min.jshttps://cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.4/jquery.backstretch.min.jss"></script>
+		<script>
+		jQuery(function($){
+			var active;
+			var boxes = $('.accordion-slider .box').length;
+			var singleBoxWidth = (100 / boxes);
+			var collapsedWidth = singleBoxWidth - ( singleBoxWidth / ( boxes - 1 ) );
+			var openWidth = 100 - (collapsedWidth * ( boxes - 1 ) );
+
+			function accordionSlider() {
+				$('.accordion-slider .box').css('width', 100 + '%' )
+				$('.accordion-slider .box').on('mouseenter', function(){
+					if ( !$(this).hasClass('active') && $(window).width() >= 550 ){
+						//hide active elements
+						if( active ){ 
+							TweenLite.to(active.find('.accordion-slider-title'), 0.3, {opacity:0, x:0, overwrite:'all'});
+							TweenLite.to(active.find('.accordion-slider-content'), 0.3, {opacity:0, x:0, overwrite:'all'});
+						}
+							
+						//introduce new active elements
+						var others = $('.accordion-slider .box').not(this);
+						active = $(this);
+						$(this).addClass('active');
+						others.removeClass('active');
+						var tl = new TimelineLite();
+						tl.to(others, 0.8, {ease: Back.easeOut.config(1.1),width: 100 + '%'}, 0)
+						.to(active.find('.accordion-slider-title'), 0.6, {ease: Back.easeOut.config(1.2),opacity:1, x:100}, 0.3)
+						.to(active.find('.accordion-slider-content'), 0.6, {ease: Back.easeOut.config(1.2),x:100, opacity:1}, 0.4);
+					}
+
+				});
+				$('.accordion-slider .box').on('mouseleave', function(){
+					if ( $(window).width() >= 550 ){
+						var all = $('.accordion-slider .box');
+						var tl = new TimelineLite();
+						tl.to(all, 0.8, {ease: Back.easeOut.config(1.1),width: 100 + '%'}, 0)
+						.to(active.find('.accordion-slider-title'), 0.3, {opacity:0, x:0, overwrite:'all'}, 0)
+						.to(active.find('.accordion-slider-content'), 0.3, {opacity:0, x:0, overwrite:'all'}, 0)
+						$(this).removeClass('active');
+					}
+				});
+				if( $(window).width() < 550 ) {
+					$('.accordion-slider-title, .accordion-slider-content').removeAttr('style');
+					$('.accordion-slider .box').removeClass('active').css('width', '100%');
+				}
+					
+			}
+
+		  accordionSlider()
+
+		  $(window).resize(function(){accordionSlider()});
+
+
+		});
+		</script>
+		<style>
+		* {
+		  box-sizing: border-box;
+		}
+		body {
+		  margin: 0;
+		  font-family: "Oswald", Helvetica, sans-serif;
+		}
+
+		a {
+		  text-decoration: none;
+		}
+
+		.button {
+		  background: #333;
+		  padding: 8px 12px;
+		  color: #fff;
+		  font-size: 11px;
+		  text-transform: uppercase;
+		}
+
+		.accordion-slider {
+		  width: 100%;
+		  font-size: 0;
+		  background: #f5f5f5;
+		}
+
+		.accordion-slider .box.first-box {
+																									  background: #000 url('img/wave-3445011_1920.jpg') no-repeat center center;
+																									}
+
+																									.accordion-slider .box.second-box {
+																									  background: #000 url('img/bed-linen-1149842_1920.jpg') no-repeat center center;
+																									}
+
+																									.accordion-slider .box.third-box {
+																									  background: #000 url('img/black-and-white-1284072_1280.jpg') no-repeat center center;
+																									}
+
+		.accordion-slider .box {
+		  display: block;
+		  width: 100%;
+		  font-size: 18px;
+		  height:707px;
+		  position: relative;
+		  float: left;
+		  top:0;
+		}
+
+		.accordion-slider .box > .inner {
+		  position: absolute;
+		  top: 50%;
+		  -webkit-transform: translateY(-50%);
+		  transform: translateY(-50%);
+		}
+
+		.accordion-slider-title {
+		  color: #fff;
+		  opacity: 0;
+		  text-transform: uppercase;
+		  letter-spacing: 1px;
+		  margin-top: 0;
+		  font-family:"Gabriola";
+		}
+
+		.accordion-slider-content {
+		  opacity: 0;
+		  width: 100%;
+		  max-width: 400px;
+		  position: relative;
+		  color: #fff;
+		}
+
+		@media screen and (max-width: 549px) {
+		  .accordion-slider-title,
+		  .accordion-slider-content {
+			opacity: 1;
+			text-align: center;
+			width: 100%;
+			max-width: 100%;
+		  }
+		  .site-footer {
+			display: block;
+		  }
+		  .accordion-slider .box {
+			float: left;
+			width: 100%;
+			text-align: center;
+			min-height: 200px;
+			height: 50vh;
+		  }
+		  .accordion-slider .box > .inner {
+			width: 100%;
+		  }
+		}
+		</style>
+	</head>
+	
+	<body>
+		<div class="accordion-slider clearfix">
+		  <div class="box first-box">
+			<div class="inner">
+			  <h2 class="accordion-slider-title">Underwater Photos</h2>
+			  <p class="accordion-slider-content"><a href="#" class="button">View Photos</a></p>
+			</div>
+		  </div>
+		  <div class="box second-box">
+			<div class="inner">
+			  <h2 class="accordion-slider-title">Land Photos</h2>
+			  <p class="accordion-slider-content"><a href="#" class="button">View Photos</a></p>
+			</div>
+		  </div>
+		  <div class="box third-box">
+			<div class="inner">
+			  <h2 class="accordion-slider-title">Action Photos</h2>
+			  <p class="accordion-slider-content"><a href="#" class="button">View Photos</a></p>
+			</div>
+		  </div>
+		</div>
+	</body>
+</html>
